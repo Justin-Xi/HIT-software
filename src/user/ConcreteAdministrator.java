@@ -1,18 +1,14 @@
 package user;
 
-
-import system.RetailSystem;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ConcreteAdministrator implements Administrator {
 
     private final String name;
-    private final String keyWord;
+    private String keyWord;
     private final String character ="Administrator";
-    private Map<String,Boolean> permissions = new HashMap<>();
+    private final Map<String,Boolean> permissions = new HashMap<>();
 
     public ConcreteAdministrator(String name, String keyWord){
         this.name = name;
@@ -49,8 +45,13 @@ public class ConcreteAdministrator implements Administrator {
     }
 
     @Override
-    public void setPermissions(Map<String, Boolean> permissions) {
-        this.permissions = permissions;
+    public void SetOthersPermissions(User user,String str,boolean flag) {
+        user.setPermissions(str,flag);
+    }
+
+    @Override
+    public void setPermissions(String str, boolean flag) {
+            permissions.put(str,flag);
     }
 
     @Override
@@ -61,42 +62,11 @@ public class ConcreteAdministrator implements Administrator {
     }
 
     @Override
-    public void SetPermissions(User user,String str,boolean flag) {
-        Map<String,Boolean> p = user.getPermissions();
-        p.put(str,flag);
-        user.setPermissions(p);
+    public void changeKeyWord(String oldKeyWord, String newKeyWord) {
+        if(!oldKeyWord.equals(keyWord))
+            System.out.println("原密码有误");
+        else
+            keyWord = newKeyWord;
     }
-
-    @Override
-    public void add(RetailSystem system , User user) {
-        if(permissions.get("添加用户"))
-            System.out.println("您没有权限添加用户");
-        else{
-            system.add(user);
-            System.out.println("用户"+user.getUserName()+"添加成功");
-        }
-    }
-
-    @Override
-    public void delete(RetailSystem system, User user) {
-        if(permissions.get("删除用户"))
-            System.out.println("您没有权限删除用户");
-        else{
-            system.delete(user);
-            System.out.println("用户"+user.getUserName()+"删除成功");
-        }
-    }
-
-    @Override
-    public List<User> getList(RetailSystem system) {
-        if(permissions.get("用户列表")) {
-            System.out.println("您没有权限查看用户列表");
-            return null;
-        }
-        else{
-            return system.getUsers();
-        }
-    }
-
 
 }

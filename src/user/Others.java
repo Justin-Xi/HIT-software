@@ -1,8 +1,5 @@
 package user;
 
-import system.RetailSystem;
-
-import java.util.List;
 import java.util.Map;
 
 public interface Others extends User{
@@ -51,9 +48,11 @@ public interface Others extends User{
     int hashCode(User user);
 
     /**
-     * 用于设置个人用户的权限
+     * 用于设置用户权限，以权限名称和权限是否开启传入
+     * @param str 权限名称，且必须是用户可以操作的权限
+     * @param flag 权限是否开启
      */
-    void setPermissions(Map<String ,Boolean> permissions);
+    void setPermissions(String str,boolean flag);
 
     /**
      * 获取个人用户权限
@@ -61,23 +60,10 @@ public interface Others extends User{
     Map<String,Boolean> getPermissions();
 
     /**
-     * 可以在系统中添加某个用户，除管理者以外，其他用户默认无此权限
-     * @param system 系统
-     * @param user 要添加的用户
+     * 用于更改用户密码的方法
+     * @param oldKeyWord 旧密码
+     * @param newKeyWord 新密码
      */
-    void add(RetailSystem system, User user);
+    void changeKeyWord(String oldKeyWord,String newKeyWord);
 
-    /**
-     * 可以在系统中删除某个用户，除管理者以外，其他用户默认无此权限
-     * @param system 系统
-     * @param user 要删除的用户
-     */
-    void delete(RetailSystem system, User user);
-
-    /**
-     * 获得用户的列表，除管理者以外，其他用户默认无此权限
-     * @param system 系统
-     * @return 用户列表
-     */
-    List<User> getList(RetailSystem system);
 }
