@@ -84,10 +84,16 @@ public class APP {
         Scanner scanner = new Scanner(System.in);
         String s = scanner.next();
         List<User> userList = system.getUsers();
+        boolean flag = false;
         for(User user:userList){
-            if(user.getUserName().equals(s))
+            if(user.getUserName().equals(s)) {
                 system.delete(user);
+                flag = true;
+                System.out.println("成功删除用户"+user.getUserName());
+            }
         }
+        if(!flag)
+            System.out.println("用户不存在!");
     }
 
     /**
