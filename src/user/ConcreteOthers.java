@@ -16,7 +16,8 @@ public class ConcreteOthers implements Others{
         this.character = character;
         permissions.put("添加用户",false);
         permissions.put("删除用户",false);
-        permissions.put("用户列表",true);
+        permissions.put("用户列表",false);
+        permissions.put("更改用户权限",false);
     }
 
     @Override

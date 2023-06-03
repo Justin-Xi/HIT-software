@@ -10,6 +10,14 @@ import java.util.List;
 public interface RetailSystem {
 
     /**
+     * 产生空系统的静态方法
+     * @return 一个崭新的空系统
+     */
+    static RetailSystem emptySystem(){
+        return new ConcreteSystem();
+    }
+
+    /**
      * 添加一个用户
      * @param user 待添加的用户
      */
@@ -26,4 +34,10 @@ public interface RetailSystem {
      * @return 用户列表
      */
     List<User> getUsers();
+
+    /**
+     * 系统可用的功能
+     * @return 功能列表
+     */
+    List<String> getPermissions();
 }
