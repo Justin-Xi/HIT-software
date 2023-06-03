@@ -1,6 +1,5 @@
 package user;
 
-
 import java.util.Map;
 
 public interface Administrator extends User{

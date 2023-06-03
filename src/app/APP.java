@@ -211,6 +211,7 @@ public class APP {
 
         //创造一个系统，及所需要的数据
         RetailSystem system = RetailSystem.emptySystem();
+        FileOperation.readFile(system);
         List<User> userList = system.getUsers();
         User user;
 
@@ -263,6 +264,7 @@ public class APP {
             }
             if(line4.equals("5")){
                 System.out.println("欢迎下次使用");
+                FileOperation.writeFile(system);
                 break;
             }
             switch (Integer.parseInt(line4)) {
