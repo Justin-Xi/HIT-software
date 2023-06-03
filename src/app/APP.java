@@ -24,21 +24,44 @@ public class APP {
             System.out.print("请输入用户名:");
             Scanner scanner2 = new Scanner(System.in);
             line2 = scanner2.next();
-            for (User u : userList) {
-                if (u.getUserName().equals(line2)) {
-                    System.out.println("用户名重复，请重新输入");
-                    flag = false;
+            Pattern pattern = Pattern.compile("[A-Za-z0-9]+");
+            Matcher matcher = pattern.matcher(line2);
+            if(!matcher.matches())
+                System.out.println("用户名不符合格式，请重新输入");
+            else {
+                for (User u : userList) {
+                    if (u.getUserName().equals(line2)) {
+                        System.out.println("用户名重复，请重新输入");
+                        flag = false;
+                    }
                 }
+                if (flag)
+                    break;
             }
-            if(flag)
+        }
+        String line3,line4;
+        while(true) {
+            System.out.print("请输入密码:");
+            Scanner scanner3 = new Scanner(System.in);
+            line3 = scanner3.next();
+            Pattern pattern = Pattern.compile("[A-Za-z0-9]+");
+            Matcher matcher = pattern.matcher(line3);
+            if(!matcher.matches())
+                System.out.println("密码不符合格式，请重新输入");
+            else
                 break;
         }
-        System.out.print("请输入密码:");
-        Scanner scanner3 = new Scanner(System.in);
-        String line3 = scanner3.next();
-        System.out.print("请输入身份(Administrator/Supplier/Client/Courier):");
-        Scanner scanner4 = new Scanner(System.in);
-        String line4 = scanner4.next();
+        while(true) {
+            System.out.print("请输入身份(Supplier/Client/Courier):");
+            Scanner scanner4 = new Scanner(System.in);
+            line4 = scanner4.next();
+            Pattern pattern = Pattern.compile("Supplier|Client|Courier");
+            Matcher matcher = pattern.matcher(line4);
+            if(!matcher.matches())
+                System.out.println("身份不符合格式，请重新输入");
+            else
+                break;
+        }
         return User.createUser(line2, line3, line4);
 
     }
@@ -118,6 +141,7 @@ public class APP {
         while(true) {
             String in;
             while(true){
+                System.out.println("功能列表:");
                 for (String i : list)
                     System.out.println(1 + list.indexOf(i) + "." + i + permission.get(i));
                 System.out.println("5.退出功能");
