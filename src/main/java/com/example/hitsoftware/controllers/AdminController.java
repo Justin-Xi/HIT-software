@@ -190,15 +190,23 @@ public class AdminController {
         if(user==null)
             return Result.fail("User does not exist");
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-        switch (permission){
-            case "permission":
-                if (user.getUserPermission().equals("false"))
-                    updateWrapper.eq("user_name", userName).set("user_permission", "true");
-                else
-                    updateWrapper.eq("user_name", userName).set("user_permission", "false");
-                break;
-            default:
-                return Result.fail("Permission does not exist");
+        try {
+            switch (permission) {
+                case "permission":
+                    if (user.getUserPermission().equals("false"))
+                        updateWrapper.eq("user_name", userName).set("user_permission", "true");
+                    else if (user.getUserPermission().equals("true"))
+                        updateWrapper.eq("user_name", userName).set("user_permission", "false");
+                    else
+                        updateWrapper.eq("user_name", userName).set("user_permission", "false");
+                    break;
+                default:
+                    return Result.fail("Permission does not exist");
+            }
+        }catch (NullPointerException e){
+            updateWrapper.eq("user_name", userName).set("user_permission", "false");
+            Integer rows = userMapper.update(null, updateWrapper);
+            return Result.success();
         }
         Integer rows = userMapper.update(null, updateWrapper);
         return Result.success();
