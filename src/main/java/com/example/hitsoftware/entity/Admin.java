@@ -1,10 +1,12 @@
-package com.example.hitsoftware.vo;
+package com.example.hitsoftware.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-public class AdminVo {
+@TableName("admin")
+public class Admin {
 
     @TableId
     private String adminName;
