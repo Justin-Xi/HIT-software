@@ -12,5 +12,12 @@ public class Courier {
     private String courierName;
     private String keyWord;
     private String courierContact;
-    private String free;
+    private String courierFree;
+
+    public Courier(String courierName, String keyWord, String courierContact, String courierFree) {
+        this.courierName = courierName;
+        this.keyWord = keyWord;
+        this.courierContact = courierContact;
+        this.courierFree = courierFree;
+    }
 }

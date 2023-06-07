@@ -27,4 +27,9 @@ public class Result<T> {
         Result result =new Result(1,"failed",null);
         return result;
     }
+
+    public static <T> Result fail(String str){
+        Result result =new Result(1,str,null);
+        return result;
+    }
 }

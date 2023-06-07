@@ -12,5 +12,12 @@ public class Manager {
     private String managerName;
     private String keyWord;
     private String managerContact;
-    private String address;
+    private String managerAddress;
+
+    public Manager(String managerName, String keyWord, String managerContact, String managerAddress) {
+        this.managerName = managerName;
+        this.keyWord = keyWord;
+        this.managerContact = managerContact;
+        this.managerAddress = managerAddress;
+    }
 }

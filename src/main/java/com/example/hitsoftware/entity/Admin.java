@@ -11,4 +11,9 @@ public class Admin {
     @TableId
     private String adminName;
     private String keyWord;
+
+    public Admin(String adminName, String keyWord) {
+        this.adminName = adminName;
+        this.keyWord = keyWord;
+    }
 }

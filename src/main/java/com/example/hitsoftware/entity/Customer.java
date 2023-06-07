@@ -13,4 +13,11 @@ public class Customer {
     private String keyWord;
     private String customerContact;
     private String customerAddress;
+
+    public Customer(String customerName, String keyWord, String customerContact, String customerAddress) {
+        this.customerName = customerName;
+        this.keyWord = keyWord;
+        this.customerContact = customerContact;
+        this.customerAddress = customerAddress;
+    }
 }

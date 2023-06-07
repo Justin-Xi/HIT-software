@@ -13,4 +13,11 @@ public class Supplier {
     private String keyWord;
     private String supplierContact;
     private String supplierAddress;
+
+    public Supplier(String supplierName, String keyWord, String supplierContact, String supplierAddress) {
+        this.supplierName = supplierName;
+        this.keyWord = keyWord;
+        this.supplierContact = supplierContact;
+        this.supplierAddress = supplierAddress;
+    }
 }
