@@ -1,7 +1,7 @@
 package com.example.hitsoftware.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.hitsoftware.pojo.User;
+import com.example.hitsoftware.pojo.Admin;
 
-public interface UserMapper extends BaseMapper<User> {
+public interface AdminMapper extends BaseMapper<Admin> {
 }

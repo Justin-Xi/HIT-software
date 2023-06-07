@@ -1,7 +1,7 @@
 package com.example.hitsoftware.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.hitsoftware.pojo.User;
+import com.example.hitsoftware.pojo.Admin;
 
-public interface IUserService extends IService<User> {
+public interface IAdminService extends IService<Admin> {
 }
