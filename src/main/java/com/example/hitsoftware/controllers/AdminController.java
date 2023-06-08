@@ -85,11 +85,11 @@ public class AdminController {
     }
 
     /**
-     * 用于获取每一个用户的详细信息
+     * 用于获取用户的详细信息
      * @param userName 用户名
      * @return 一个用户的详细信息
      */
-    @GetMapping("/admin/detail/{userName}")
+    @GetMapping("/detail/{userName}")
     public Result detail(@PathVariable String userName){
         log.info("user detail, userName={}",userName);
         User user = userService.getById(userName);
