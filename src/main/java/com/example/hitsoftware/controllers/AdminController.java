@@ -124,7 +124,7 @@ public class AdminController {
                 courierService.save(new Courier(user.getUserName(), user.getKeyWord(), user.getUserContact(), "true"));
                 break;
             case "Customer":
-                courierService.save(new Courier(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
+                customerService.save(new Customer(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
                 break;
             case "Manager":
                 managerService.save(new Manager(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
@@ -133,7 +133,7 @@ public class AdminController {
                 supplierService.save(new Supplier(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
                 break;
             default:
-                return Result.fail("Exception error");
+                return Result.fail("Identity error");
         }
         return Result.success();
     }
@@ -192,33 +192,17 @@ public class AdminController {
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
             switch (permission) {
                 case "addPermission":
-                    try {
-                        if (user.getAddPermission().equals("false"))
+                        if (user.getAddPermission().equals("false")||null==user.getAddPermission())
                             updateWrapper.eq("user_name", userName).set("add_permission", "true");
                         else if (user.getAddPermission().equals("true"))
                             updateWrapper.eq("user_name", userName).set("add_permission", "false");
-                        else
-                            updateWrapper.eq("user_name", userName).set("add_permission", "false");
                         break;
-                    }catch(NullPointerException e){
-                        updateWrapper.eq("user_name", userName).set("add_permission", "false");
-                        Integer rows = userMapper.update(null, updateWrapper);
-                        return Result.success();
-                    }
                 case "deletePermission":
-                    try {
-                        if (user.getAddPermission().equals("false"))
+                        if (user.getAddPermission().equals("false")||null==user.getAddPermission())
                             updateWrapper.eq("user_name", userName).set("delete_permission", "true");
                         else if (user.getAddPermission().equals("true"))
                             updateWrapper.eq("user_name", userName).set("delete_permission", "false");
-                        else
-                            updateWrapper.eq("user_name", userName).set("delete_permission", "false");
                         break;
-                    }catch(NullPointerException e){
-                        updateWrapper.eq("user_name", userName).set("delete_permission", "false");
-                        Integer rows = userMapper.update(null, updateWrapper);
-                        return Result.success();
-                    }
                 default:
                     return Result.fail("Permission does not exist");
             }

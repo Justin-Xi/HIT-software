@@ -53,22 +53,32 @@ public class CustomerController {
      * 添加用户的接口，这里采用了json数据格式进行传送
      * 数据，前端在使用的时候，定义好要用的数据，用户
      * 名，密码，身份，联系方式，地址，权限，没有的可以
-     * 不加，后端会赋值为null
+     * 不加，后端会赋值为null。与admin的add不同，用户
+     * 的删除需要前端额外传回当前正在登录的用户名称，
+     * 便于判断是否有权限去添加用户。
+     * @param userName 当前用户的用户名
      * @param user 用户
      * @return json结果
      */
-    @PostMapping("/add")
-    public Result add(@RequestBody User user){
+    @PostMapping("/add/{userName}")
+    public Result add(@PathVariable String userName,@RequestBody User user){
         log.info("supplier add, user={}",user);
         Pattern pattern = Pattern.compile("[0-9a-zA-Z]+");
         Matcher matcher1 = pattern.matcher(user.getUserName());
         Matcher matcher2 = pattern.matcher(user.getKeyWord());
         User user1 = userService.getById(user.getUserName());
+        User user2 = userService.getById(userName);
+        //判断权限是否是true
+        if(user2.getAddPermission().equals("false"))
+            return Result.fail("Missing permissions");
+        //判断格式是否正确
         if(!(matcher1.matches()&&matcher2.matches()))
             return Result.fail("Format error");
+        //判断用户是否存在
         if(user1!=null)
             return Result.fail("User exist");
-        if(!user.getUserCharacter().equals("supplier"))
+        //判断身份是否正确
+        if(!user.getUserCharacter().equals("Supplier"))
            return Result.fail("Identity error");
         userService.save(user);
         supplierService.save(new Supplier(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
@@ -79,14 +89,19 @@ public class CustomerController {
      * 删除用户的接口，将用户从数据库中删除，用户不存在
      * 的话就会返回失败信息，存在的话就会返回成功信息，
      * 作为删除的接口，只需要提供用户名就能删除
-     * @param userName 用户名
+     * @param userName 当前登录用户名
+     * @param userName2 要删除用户名
      * @return json接口
      */
     @DeleteMapping("/delete/{userName}")
-    public Result delete(@PathVariable String userName){
-        log.info("supplier delete userName={}",userName);
-        boolean flag = userService.removeById(userName);
-        supplierService.removeById(userName);
+    public Result delete(String userName,String userName2){
+        log.info("supplier delete userName={},userName2={}",userName,userName2);
+        User user = userService.getById(userName);
+        //判断权限是否是true
+        if(user.getAddPermission().equals("false")||null==user.getAddPermission())
+            return Result.fail("Missing permissions");
+        boolean flag = userService.removeById(userName2);
+        supplierService.removeById(userName2);
         if(flag)
             return Result.success();
         return Result.fail("Removal failed");
