@@ -30,5 +30,4 @@ public class CourierController {
         return Result.success(user);
     }
 
-
 }

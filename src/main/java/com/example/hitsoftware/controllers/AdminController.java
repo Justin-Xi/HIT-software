@@ -106,7 +106,7 @@ public class AdminController {
      */
     @PostMapping("/add")
     public Result add(@RequestBody User user){
-        log.info("courier add, user={}",user);
+        log.info("user add, user={}",user);
         Pattern pattern = Pattern.compile("[0-9a-zA-Z]+");
         Matcher matcher1 = pattern.matcher(user.getUserName());
         Matcher matcher2 = pattern.matcher(user.getKeyWord());
@@ -190,24 +190,38 @@ public class AdminController {
         if(user==null)
             return Result.fail("User does not exist");
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-        try {
             switch (permission) {
-                case "permission":
-                    if (user.getUserPermission().equals("false"))
-                        updateWrapper.eq("user_name", userName).set("user_permission", "true");
-                    else if (user.getUserPermission().equals("true"))
-                        updateWrapper.eq("user_name", userName).set("user_permission", "false");
-                    else
-                        updateWrapper.eq("user_name", userName).set("user_permission", "false");
-                    break;
+                case "addPermission":
+                    try {
+                        if (user.getAddPermission().equals("false"))
+                            updateWrapper.eq("user_name", userName).set("add_permission", "true");
+                        else if (user.getAddPermission().equals("true"))
+                            updateWrapper.eq("user_name", userName).set("add_permission", "false");
+                        else
+                            updateWrapper.eq("user_name", userName).set("add_permission", "false");
+                        break;
+                    }catch(NullPointerException e){
+                        updateWrapper.eq("user_name", userName).set("add_permission", "false");
+                        Integer rows = userMapper.update(null, updateWrapper);
+                        return Result.success();
+                    }
+                case "deletePermission":
+                    try {
+                        if (user.getAddPermission().equals("false"))
+                            updateWrapper.eq("user_name", userName).set("delete_permission", "true");
+                        else if (user.getAddPermission().equals("true"))
+                            updateWrapper.eq("user_name", userName).set("delete_permission", "false");
+                        else
+                            updateWrapper.eq("user_name", userName).set("delete_permission", "false");
+                        break;
+                    }catch(NullPointerException e){
+                        updateWrapper.eq("user_name", userName).set("delete_permission", "false");
+                        Integer rows = userMapper.update(null, updateWrapper);
+                        return Result.success();
+                    }
                 default:
                     return Result.fail("Permission does not exist");
             }
-        }catch (NullPointerException e){
-            updateWrapper.eq("user_name", userName).set("user_permission", "false");
-            Integer rows = userMapper.update(null, updateWrapper);
-            return Result.success();
-        }
         Integer rows = userMapper.update(null, updateWrapper);
         return Result.success();
     }
