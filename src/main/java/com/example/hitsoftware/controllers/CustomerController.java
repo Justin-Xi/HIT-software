@@ -3,7 +3,7 @@ package com.example.hitsoftware.controllers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.hitsoftware.entity.*;
-import com.example.hitsoftware.service.ISupplierService;
+import com.example.hitsoftware.service.ISupplierInfoService;
 import com.example.hitsoftware.service.IUserService;
 import com.example.hitsoftware.vo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class CustomerController {
 
     @Autowired
-    ISupplierService supplierService;
+    ISupplierInfoService supplierService;
     @Autowired
     IUserService userService;
 
