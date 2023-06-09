@@ -24,11 +24,11 @@ public class AdminController {
     @Autowired
     ICourierService courierService;
     @Autowired
-    ICustomerService customerService;
+    ICustomerInfoService customerService;
     @Autowired
     IManagerService managerService;
     @Autowired
-    ISupplierService supplierService;
+    ISupplierInfoService supplierService;
     @Autowired
     IUserService userService;
     @Autowired

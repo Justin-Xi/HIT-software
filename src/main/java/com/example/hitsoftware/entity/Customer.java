@@ -20,4 +20,16 @@ public class Customer {
         this.customerContact = customerContact;
         this.customerAddress = customerAddress;
     }
+    @Override
+    public boolean equals(Object o){
+        if(o==null||o.getClass()!=Customer.class){
+            return false;
+        }
+        Customer customer=(Customer) o;
+        return customer.getCustomerName().equals(this.customerName);
+    }
+    @Override
+    public int hashCode(){
+        return Integer.parseInt(this.customerName);
+    }
 }

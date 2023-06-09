@@ -20,4 +20,16 @@ public class Supplier {
         this.supplierContact = supplierContact;
         this.supplierAddress = supplierAddress;
     }
+    @Override
+    public boolean equals(Object o){
+        if(o==null||o.getClass()!=Supplier.class){
+            return false;
+        }
+        Supplier supplier=(Supplier) o;
+        return supplier.getSupplierName().equals(this.supplierName);
+    }
+    @Override
+    public int hashCode(){
+        return Integer.parseInt(this.supplierName);
+    }
 }
