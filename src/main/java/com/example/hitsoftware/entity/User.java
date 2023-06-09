@@ -14,14 +14,16 @@ public class User {
     private String userCharacter;
     private String userContact;
     private String userAddress;
-    private String userPermission;
+    private String addPermission;
+    private String deletePermission;
 
-    public User(String userName, String keyWord, String userCharacter, String userContact, String userAddress, String userPermission) {
+    public User(String userName, String keyWord, String userCharacter, String userContact, String userAddress, String addPermission, String deletePermission) {
         this.userName = userName;
         this.keyWord = keyWord;
         this.userCharacter = userCharacter;
         this.userContact = userContact;
         this.userAddress = userAddress;
-        this.userPermission = userPermission;
+        this.addPermission = addPermission;
+        this.deletePermission = deletePermission;
     }
 }

@@ -85,11 +85,11 @@ public class AdminController {
     }
 
     /**
-     * 用于获取每一个用户的详细信息
+     * 用于获取用户的详细信息
      * @param userName 用户名
      * @return 一个用户的详细信息
      */
-    @GetMapping("/admin/detail/{userName}")
+    @GetMapping("/detail/{userName}")
     public Result detail(@PathVariable String userName){
         log.info("user detail, userName={}",userName);
         User user = userService.getById(userName);
@@ -106,7 +106,7 @@ public class AdminController {
      */
     @PostMapping("/add")
     public Result add(@RequestBody User user){
-        log.info("courier add, user={}",user);
+        log.info("user add, user={}",user);
         Pattern pattern = Pattern.compile("[0-9a-zA-Z]+");
         Matcher matcher1 = pattern.matcher(user.getUserName());
         Matcher matcher2 = pattern.matcher(user.getKeyWord());
@@ -124,7 +124,7 @@ public class AdminController {
                 courierService.save(new Courier(user.getUserName(), user.getKeyWord(), user.getUserContact(), "true"));
                 break;
             case "Customer":
-                courierService.save(new Courier(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
+                customerService.save(new Customer(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
                 break;
             case "Manager":
                 managerService.save(new Manager(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
@@ -133,7 +133,7 @@ public class AdminController {
                 supplierService.save(new Supplier(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
                 break;
             default:
-                return Result.fail("Exception error");
+                return Result.fail("Identity error");
         }
         return Result.success();
     }
@@ -190,24 +190,22 @@ public class AdminController {
         if(user==null)
             return Result.fail("User does not exist");
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-        try {
             switch (permission) {
-                case "permission":
-                    if (user.getUserPermission().equals("false"))
-                        updateWrapper.eq("user_name", userName).set("user_permission", "true");
-                    else if (user.getUserPermission().equals("true"))
-                        updateWrapper.eq("user_name", userName).set("user_permission", "false");
-                    else
-                        updateWrapper.eq("user_name", userName).set("user_permission", "false");
-                    break;
+                case "addPermission":
+                        if (user.getAddPermission().equals("false")||null==user.getAddPermission())
+                            updateWrapper.eq("user_name", userName).set("add_permission", "true");
+                        else if (user.getAddPermission().equals("true"))
+                            updateWrapper.eq("user_name", userName).set("add_permission", "false");
+                        break;
+                case "deletePermission":
+                        if (user.getAddPermission().equals("false")||null==user.getAddPermission())
+                            updateWrapper.eq("user_name", userName).set("delete_permission", "true");
+                        else if (user.getAddPermission().equals("true"))
+                            updateWrapper.eq("user_name", userName).set("delete_permission", "false");
+                        break;
                 default:
                     return Result.fail("Permission does not exist");
             }
-        }catch (NullPointerException e){
-            updateWrapper.eq("user_name", userName).set("user_permission", "false");
-            Integer rows = userMapper.update(null, updateWrapper);
-            return Result.success();
-        }
         Integer rows = userMapper.update(null, updateWrapper);
         return Result.success();
     }
