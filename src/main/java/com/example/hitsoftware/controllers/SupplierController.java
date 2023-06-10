@@ -1,7 +1,5 @@
 package com.example.hitsoftware.controllers;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.hitsoftware.entity.Manager;
 import com.example.hitsoftware.entity.User;
 import com.example.hitsoftware.service.IManagerService;
@@ -14,6 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 这个类是属于Supplier的独有类，只有用户是Supplier时，
+ * 前端才应调用其中的方法，里面存在两个方法，一个是add方法
+ * 另一个是delete方法。其中的add方法和delete方法只能添加
+ * 或者删除Manager的人。
+ */
 @RestController
 @Slf4j
 @RequestMapping("/supplier")
@@ -23,26 +27,6 @@ public class SupplierController {
     IManagerService managerService;
     @Autowired
     IUserService userService;
-
-    @GetMapping("/managerList")
-    public Result managerList(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "30")int pageSize){
-        log.info("manager list, pageNum={} pageSize={}",pageNum,pageSize);
-        Page<Manager> page = new Page<>(pageNum,pageSize);
-        IPage<Manager> iPage = managerService.page(page);
-        return Result.success(iPage);
-    }
-
-    /**
-     * 用于获取用户的详细信息
-     * @param userName 用户名
-     * @return 一个用户的详细信息
-     */
-    @GetMapping("/detail/{userName}")
-    public Result detail(@PathVariable String userName){
-        log.info("user detail, userName={}",userName);
-        User user = userService.getById(userName);
-        return Result.success(user);
-    }
 
     /**
      * 添加用户的接口，这里采用了json数据格式进行传送
@@ -56,24 +40,24 @@ public class SupplierController {
      * @return json结果
      */
     @PostMapping("/add/{userName}")
-    public Result add(@RequestBody User user,@PathVariable String userName){
-        log.info("manager add, user={}",user);
+    public Result add(@PathVariable String userName,@RequestBody User user){
+        log.info("manager add, userName={}, user={}",userName,user);
         Pattern pattern = Pattern.compile("[0-9a-zA-Z]+");
         Matcher matcher1 = pattern.matcher(user.getUserName());
         Matcher matcher2 = pattern.matcher(user.getKeyWord());
-        User user1 = userService.getById(user.getUserName());
-        User user2 = userService.getById(userName);
+        User user1 = userService.getById(userName);
+        User user2 = userService.getById(user.getUserName());
         //判断权限是否是true
-        if(user2.getAddPermission().equals("false"))
+        if(null==user1.getAddPermission()||user1.getAddPermission().equals("false"))
             return Result.fail("Missing permissions");
+        //判断用户是否存在
+        if(user2!=null)
+            return Result.fail("User exist");
         //判断格式是否正确
         if(!(matcher1.matches()&&matcher2.matches()))
             return Result.fail("Format error");
-        //判断用户是否存在
-        if(user1!=null)
-            return Result.fail("User exist");
         //判断身份是否正确
-        if(!user.getUserCharacter().equals("Manager"))
+        if(!user.getUserCharacter().equals("Manager")||!user1.getUserCharacter().equals("Supplier"))
             return Result.fail("Identity error");
         userService.save(user);
         managerService.save(new Manager(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
@@ -88,12 +72,12 @@ public class SupplierController {
      * @param userName2 要删除用户名
      * @return json接口
      */
-    @DeleteMapping("/delete/{userName}")
+    @DeleteMapping("/delete")
     public Result delete(String userName,String userName2){
-        log.info("supplier delete userName={},userName2={}",userName,userName2);
+        log.info("manager delete userName={},userName2={}",userName,userName2);
         User user = userService.getById(userName);
         //判断权限是否是true
-        if(user.getAddPermission().equals("false")||null==user.getAddPermission())
+        if(null==user.getAddPermission()||user.getAddPermission().equals("false"))
             return Result.fail("Missing permissions");
         boolean flag = userService.removeById(userName2);
         managerService.removeById(userName2);
