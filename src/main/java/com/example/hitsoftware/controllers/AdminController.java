@@ -9,6 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 这个类是属于Admin的独有类，只有用户是Admin时，
+ * 前端才应调用其中的方法，里面只存在一个方法，就是
+ * 更改其他用户的权限。
+ */
 @RestController
 @Slf4j
 @RequestMapping("/admin")

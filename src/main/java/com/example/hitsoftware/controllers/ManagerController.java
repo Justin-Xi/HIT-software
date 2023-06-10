@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 这个类是属于Manager的独有类，只有用户是Manager时，
+ * 前端才应调用其中的方法，里面存在两个方法，一个是add方法
+ * 另一个是delete方法。其中的add方法和delete方法只能添加
+ * 或者删除Courier的人。
+ */
 @RestController
 @Slf4j
 @RequestMapping("/manager")
@@ -34,24 +40,24 @@ public class ManagerController {
      * @return json结果
      */
     @PostMapping("/add/{userName}")
-    public Result add(@RequestBody User user,@PathVariable String userName){
-        log.info("courier add, user={}",user);
+    public Result add(@PathVariable String userName, @RequestBody User user){
+        log.info("courier add, userName={}, user={}",userName,user);
         Pattern pattern = Pattern.compile("[0-9a-zA-Z]+");
         Matcher matcher1 = pattern.matcher(user.getUserName());
         Matcher matcher2 = pattern.matcher(user.getKeyWord());
-        User user1 = userService.getById(user.getUserName());
-        User user2 = userService.getById(userName);
+        User user1 = userService.getById(userName);
+        User user2 = userService.getById(user.getUserName());
         //判断权限是否是true
-        if(null==user2.getAddPermission()||user2.getAddPermission().equals("false"))
+        if(null==user1.getAddPermission()||user1.getAddPermission().equals("false"))
             return Result.fail("Missing permissions");
         //判断用户是否存在
-        if(user1!=null)
+        if(user2!=null)
             return Result.fail("User exist");
         //判断格式是否正确
         if(!(matcher1.matches()&&matcher2.matches()))
             return Result.fail("Format error");
         //判断身份是否正确
-        if(!user.getUserCharacter().equals("Supplier"))
+        if(!user.getUserCharacter().equals("Courier")||!user1.getUserCharacter().equals("Manager"))
             return Result.fail("Identity error");
         userService.save(user);
         courierService.save(new Courier(user.getUserName(), user.getKeyWord(), user.getUserContact(), "true"));
@@ -66,9 +72,9 @@ public class ManagerController {
      * @param userName2 要删除用户名
      * @return json接口
      */
-    @DeleteMapping("/delete/{userName}")
+    @DeleteMapping("/delete")
     public Result delete(String userName,String userName2){
-        log.info("supplier delete userName={},userName2={}",userName,userName2);
+        log.info("courier delete userName={},userName2={}",userName,userName2);
         User user = userService.getById(userName);
         //判断权限是否是true
         if(null==user.getAddPermission()||user.getAddPermission().equals("false"))

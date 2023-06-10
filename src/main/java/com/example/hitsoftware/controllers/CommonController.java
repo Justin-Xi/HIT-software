@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 这个类是通用接口的通用类，里面包含着很多公用的方法
+ * 例如detail接口，add接口，delete接口，edit接口
+ * 等等，，这些接口被集成在通用类中，方便多次调用。
+ */
 @RestController
 @Slf4j
 @RequestMapping("/common")

@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 查询信息的接口通用类，内部有很多用来查询信息的类
+ * 目前为止，每一张表都有一个对应的查询信息的接口
+ * 看好接口对应的url进行调用即可
+ */
 @RestController
 @Slf4j
 @RequestMapping("/search")
