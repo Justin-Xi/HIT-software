@@ -68,12 +68,12 @@ public class CustomerController {
         Matcher matcher2 = pattern.matcher(user.getKeyWord());
         User user1 = userService.getById(user.getUserName());
         User user2 = userService.getById(userName);
-        //判断用户是否存在
-        if(user1!=null)
-            return Result.fail("User exist");
         //判断权限是否是true
         if(null==user2.getAddPermission()||user2.getAddPermission().equals("false"))
             return Result.fail("Missing permissions");
+        //判断用户是否存在
+        if(user1!=null)
+            return Result.fail("User exist");
         //判断格式是否正确
         if(!(matcher1.matches()&&matcher2.matches()))
             return Result.fail("Format error");
@@ -98,7 +98,7 @@ public class CustomerController {
         log.info("supplier delete userName={},userName2={}",userName,userName2);
         User user = userService.getById(userName);
         //判断权限是否是true
-        if(user.getAddPermission().equals("false")||null==user.getAddPermission())
+        if(null==user.getAddPermission()||user.getAddPermission().equals("false"))
             return Result.fail("Missing permissions");
         boolean flag = userService.removeById(userName2);
         supplierService.removeById(userName2);
