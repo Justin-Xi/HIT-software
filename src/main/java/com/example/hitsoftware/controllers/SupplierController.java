@@ -63,17 +63,17 @@ public class SupplierController {
         Matcher matcher2 = pattern.matcher(user.getKeyWord());
         User user1 = userService.getById(user.getUserName());
         User user2 = userService.getById(userName);
+        //判断用户是否存在
+        if(user1!=null)
+            return Result.fail("User exist");
         //判断权限是否是true
-        if(user2.getAddPermission().equals("false"))
+        if(null==user2.getAddPermission()||user2.getAddPermission().equals("false"))
             return Result.fail("Missing permissions");
         //判断格式是否正确
         if(!(matcher1.matches()&&matcher2.matches()))
             return Result.fail("Format error");
-        //判断用户是否存在
-        if(user1!=null)
-            return Result.fail("User exist");
         //判断身份是否正确
-        if(!user.getUserCharacter().equals("Manager"))
+        if(!user.getUserCharacter().equals("Supplier"))
             return Result.fail("Identity error");
         userService.save(user);
         managerService.save(new Manager(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));

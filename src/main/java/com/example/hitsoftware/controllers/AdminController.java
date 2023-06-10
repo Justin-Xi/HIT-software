@@ -192,15 +192,15 @@ public class AdminController {
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
             switch (permission) {
                 case "addPermission":
-                        if (user.getAddPermission().equals("false")||null==user.getAddPermission())
+                        if (null==user.getAddPermission()||user.getAddPermission().equals("false"))
                             updateWrapper.eq("user_name", userName).set("add_permission", "true");
                         else if (user.getAddPermission().equals("true"))
                             updateWrapper.eq("user_name", userName).set("add_permission", "false");
                         break;
                 case "deletePermission":
-                        if (user.getAddPermission().equals("false")||null==user.getAddPermission())
+                        if (null==user.getDeletePermission()||user.getDeletePermission().equals("false"))
                             updateWrapper.eq("user_name", userName).set("delete_permission", "true");
-                        else if (user.getAddPermission().equals("true"))
+                        else if (user.getDeletePermission().equals("true"))
                             updateWrapper.eq("user_name", userName).set("delete_permission", "false");
                         break;
                 default:
