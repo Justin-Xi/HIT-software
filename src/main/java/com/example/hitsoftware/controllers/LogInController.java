@@ -40,8 +40,8 @@ public class LogInController {
      * @param keyWord 密码
      * @return 结果类，里面储存了登录成功或者登录失败的信息
      */
-    @GetMapping("/login")
-    public Result login(String userName,String keyWord){
+    @GetMapping("/login/{userName}")
+    public Result login(@PathVariable String userName,String keyWord){
         log.info("user log, userName={}, keyWord={}",userName,keyWord);
         Pattern pattern = Pattern.compile("[0-9a-zA-Z]+");
         Matcher matcher = pattern.matcher(userName);
