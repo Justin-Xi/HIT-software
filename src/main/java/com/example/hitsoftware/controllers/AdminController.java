@@ -35,7 +35,7 @@ public class AdminController {
      */
     @PutMapping("/permission/{userName}")
     public Result permissionEdit(@PathVariable String userName,String permission){
-        log.info("permission edit, userName={}",userName);
+        log.info("permission edit, userName={}, permission={}",userName,permission);
         User user = userService.getById(userName);
         if(user==null)
             return Result.fail("User does not exist");

@@ -42,7 +42,7 @@ public class LogInController {
      */
     @GetMapping("/login")
     public Result login(String userName,String keyWord){
-        log.info("user detail, userName={},keyWord={}",userName,keyWord);
+        log.info("user log, userName={}, keyWord={}",userName,keyWord);
         Pattern pattern = Pattern.compile("[0-9a-zA-Z]+");
         Matcher matcher = pattern.matcher(userName);
         if(!matcher.matches())
@@ -60,7 +60,7 @@ public class LogInController {
      */
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
-        log.info("user add, user={}",user);
+        log.info("user register, user={}",user);
         Pattern pattern = Pattern.compile("[0-9a-zA-Z]+");
         Matcher matcher1 = pattern.matcher(user.getUserName());
         Matcher matcher2 = pattern.matcher(user.getKeyWord());

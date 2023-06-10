@@ -28,10 +28,10 @@ public class CustomerController {
     IUserService userService;
 
     /**
-     * 添加用户的接口，这里采用了json数据格式进行传送
+     * 添加供应商的接口，这里采用了json数据格式进行传送
      * 数据，前端在使用的时候，定义好要用的数据，用户
      * 名，密码，身份，联系方式，地址，权限，没有的可以
-     * 不加，后端会赋值为null。与admin的add不同，用户
+     * 不加，后端会赋值为null。与通用的add不同，用户
      * 的删除需要前端额外传回当前正在登录的用户名称，
      * 便于判断是否有权限去添加用户。
      * @param userName 当前用户的用户名
