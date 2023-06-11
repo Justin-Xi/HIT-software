@@ -24,11 +24,11 @@ public class LogInController {
     @Autowired
     ICourierService courierService;
     @Autowired
-    ICustomerInfoService customerService;
+    ICustomerService customerService;
     @Autowired
     IManagerService managerService;
     @Autowired
-    ISupplierInfoService supplierService;
+    ISupplierService supplierService;
     @Autowired
     IUserService userService;
 
