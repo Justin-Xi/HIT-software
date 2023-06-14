@@ -1,8 +1,10 @@
 package com.example.hitsoftware.controllers;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.hitsoftware.entity.*;
+import com.example.hitsoftware.mapper.UserMapper;
 import com.example.hitsoftware.service.*;
 import com.example.hitsoftware.vo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 用于获取列表的接口集合类，里面包含着各种获得列表的接口
@@ -33,6 +37,8 @@ public class ListController {
     ISupplierService supplierService;
     @Autowired
     IUserService userService;
+    @Autowired
+    UserMapper userMapper;
 
 
     /**
@@ -116,6 +122,15 @@ public class ListController {
         log.info("user list, pageNum={} pageSize={}",pageNum,pageSize);
         Page<User> page = new Page<>(pageNum,pageSize);
         IPage<User> iPage = userService.page(page);
+        return Result.success(iPage);
+    }
+
+    @GetMapping("/supplierList2")
+    public Result supplierList2(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "30")int pageSize){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("*").eq("user_character","supplier");
+        Page<User> page = new Page<>(pageNum, pageSize);
+        IPage<User> iPage = userMapper.selectPage(page, queryWrapper);
         return Result.success(iPage);
     }
 }
