@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>注册界面</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .container h1{
+        text-align: center;
+    }
+
+        
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      width: 90%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .form-group input[type="submit"]{
+        background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>注册</h1>
+    <form>
+      <div class="form-group">
+        <label for="username">用户名</label>
+        <input type="text" id="username" name="username" placeholder="请输入用户名">
+      </div>
+      <div class="form-group">
+        <label for="password">密码</label>
+        <input type="password" id="password" name="password" placeholder="请输入密码">
+      </div>
+      <div class="form-group">
+        <label for="character">身份</label>
+        <input type="character" id="character" name="character" placeholder="请输入身份类型">
+      </div>
+      <div class="form-group">
+        <input type="submit" id="submitButton" value="注册">
+      </div>
+    </form>
+  </div>
+  
+  <script src="axios.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+  <script>
+    document.getElementById("submitButton").addEventListener("click", function(event) {
+        event.preventDefault(); // 阻止表单提交的默认行为
+
+        var userName = document.getElementById("username").value;
+        var keyWord = document.getElementById("password").value;
+        var userCharacter = document.getElementById("character").value;
+
+        var data = {
+            userName: userName,
+            keyWord: keyWord,
+            userCharacter:userCharacter,
+            userAddress:null,
+            userContact:null,
+            addPermission:false,
+            deletePermission:false
+            
+        };
+
+        axios.post("http://localhost:8080/log/register", data)
+            .then(function(response){
+                console.log(response);
+                if(!response.data.code){
+                    console.log(response);
+                    window.location.assign('login.html');
+                } 
+                else{
+                    console.log(response.data.msg);
+                    alert(response.data.msg);
+                    window.location.reload();
+                }  
+                
+            },function(err){
+                console.log(err);
+            }
+           
+            )
+        });
+  </script>
+</body>
+</html>
