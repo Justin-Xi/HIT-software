@@ -1,4 +1,4 @@
-package com.example.hitsoftware.controllers;
+package com.example.hitsoftware.controllers.special;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.hitsoftware.entity.*;
