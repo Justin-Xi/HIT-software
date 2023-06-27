@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<<<<<<< HEAD
+    <meta charset="UTF-8">
+=======
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>>>>>>> origin/master
+  <title>登录</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .biaoti h1 {
+      text-align: center;
+    }
+
+    .container h2 {
+      text-align: center;
+    }
+
+    .container label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .container input[type="text"],
+    .container input[type="password"] {
+      width: 95%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .container input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .container input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+    <div class="biaoti">
+        <h1>通用批发零售业务管理系统</h1>
+    </div>
+    <div class="container">
+        <h2>登录</h2>
+        <form>
+        <label for="username">用户名:</label>
+        <input type="text" id="userName" name="userName" placeholder="请输入用户名" required>
+
+        <label for="keyWord">密码:</label>
+        <input type="password" id="keyWord" name="keyWord" placeholder="请输入密码">
+        <p></p>
+        <div class="checkbox-container">
+            <input type="checkbox" id="checkbox" required>
+            <label for="checkbox">已阅读同意用户协议</label>
+        </div>
+
+        <input type="submit" id="submitButton" value="登录">
+        
+        </form>
+    </div>
+    <script src="axios.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <script>
+        document.getElementById("submitButton").addEventListener("click", function(event) {
+        event.preventDefault(); // 阻止表单提交的默认行为
+
+        var userName = document.getElementById("userName").value;
+        var keyWord = document.getElementById("keyWord").value;
+
+        var data = {
+            userName: userName,
+            keyWord: keyWord
+        };
+
+        var formData = new URLSearchParams();
+        formData.append("userName", userName);
+        formData.append("keyWord", keyWord);
+
+        axios.get("http://localhost:8080/log/login/"+data.userName, formData)
+            .then(function(response) {
+            console.log(response);
+            window.location.href ='./admin1.html';
+            })
+            .catch(function(error) {
+            console.log(error);
+            });
+        });
+    </script>
+
+
+  
+</body>
+</html>

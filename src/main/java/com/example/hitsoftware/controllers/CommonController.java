@@ -27,11 +27,11 @@ public class CommonController {
     @Autowired
     ICourierService courierService;
     @Autowired
-    ICustomerInfoService customerService;
+    ICustomerService customerService;
     @Autowired
     IManagerService managerService;
     @Autowired
-    ISupplierInfoService supplierService;
+    ISupplierService supplierService;
     @Autowired
     IUserService userService;
     @Autowired
@@ -91,6 +91,54 @@ public class CommonController {
     }
 
     /**
+     * 添加用户，但是需要根据用户权限判断能否添加用户
+     * 需要输入当前用户的用户名，来判断是否有权限去
+     * 添加用户
+     * @param userName 当前正在登录用户
+     * @param user 要添加的用户
+     * @return json结果
+     */
+    @PostMapping("/judgeAdd/{userName}")
+    public Result judgeAdd(@PathVariable String userName,@RequestBody User user){
+        log.info("user judgeAdd, userName={},user={}",userName,user);
+        Pattern pattern = Pattern.compile("[0-9a-zA-Z]+");
+        Matcher matcher1 = pattern.matcher(user.getUserName());
+        Matcher matcher2 = pattern.matcher(user.getKeyWord());
+        User user1 = userService.getById(userName);
+        User user2 = userService.getById(user.getUserName());
+        //判断权限是否是true
+        if(null==user1.getAddPermission()||user1.getAddPermission().equals("false"))
+            return Result.fail("Missing permissions");
+        //判断用户是否存在
+        if(user2!=null)
+            return Result.fail("User exist");
+        //判断格式是否正确
+        if(!(matcher1.matches()&&matcher2.matches()))
+            return Result.fail("Format error");
+        userService.save(user);
+        switch (user.getUserCharacter()) {
+            case "Admin":
+                adminService.save(new Admin(user.getUserName(), user.getKeyWord()));
+                break;
+            case "Courier":
+                courierService.save(new Courier(user.getUserName(), user.getKeyWord(), user.getUserContact(), "true"));
+                break;
+            case "Customer":
+                customerService.save(new Customer(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
+                break;
+            case "Manager":
+                managerService.save(new Manager(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
+                break;
+            case "Supplier":
+                supplierService.save(new Supplier(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
+                break;
+            default:
+                return Result.fail("Identity error");
+        }
+        return Result.success();
+    }
+
+    /**
      * 删除用户的接口，将用户从数据库中删除，用户不存在
      * 的话就会返回失败信息，存在的话就会返回成功信息，
      * 作为删除的接口，只需要提供用户名就能删除
@@ -109,6 +157,25 @@ public class CommonController {
             return Result.success();
         return Result.fail("Removal failed");
     }
+
+    /**
+     * 删除用户的接口，与上述delete不同，这个删除用户的接口
+     * 需要前端返回当前正在登录用户的名字，好让后端判断是否有
+     * 权力去删除用户，第二个用户名就是要删除的人
+     * @param userName 当前登录的用户
+     * @param userName2 要删除的用户
+     * @return json结果
+     */
+    @DeleteMapping("/judgeDelete")
+    public Result judgeDelete(String userName,String userName2){
+        log.info("user judgeDelete userName={},userName2={}",userName,userName2);
+        User user = userService.getById(userName);
+        //判断权限是否是true
+        if(null==user.getAddPermission()||user.getAddPermission().equals("false"))
+            return Result.fail("Missing permissions");
+        return this.delete(userName2);
+    }
+
     /**
      * 修改用户接口，这是一个比较通用的修改接口，什么数据都能修改，
      * 前端想要修改什么数据，就将修改后用户的信息以json形式传送给
@@ -118,8 +185,8 @@ public class CommonController {
      * @return json结果
      */
     @PutMapping("/edit")
-    public Result edit(@RequestBody User user){
-        log.info("user edit, user={}",user);
+    public Result edit(@RequestBody User user) {
+        log.info("user edit, user={}", user);
         this.delete(user.getUserName());
         this.add(user);
         return Result.success();

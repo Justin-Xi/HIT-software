@@ -1,7 +1,7 @@
 package com.example.hitsoftware.controllers;
 
 import com.example.hitsoftware.entity.*;
-import com.example.hitsoftware.service.ISupplierInfoService;
+import com.example.hitsoftware.service.ICustomerService;
 import com.example.hitsoftware.service.IUserService;
 import com.example.hitsoftware.vo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * 这个类是属于Customer的独有类，只有用户是Customer时，
  * 前端才应调用其中的方法，里面存在两个方法，一个是add方法
  * 另一个是delete方法。其中的add方法和delete方法只能添加
- * 或者删除Supplier的人。
+ * 或者删除Customer的人。
  */
 @RestController
 @Slf4j
@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class CustomerController {
 
     @Autowired
-    ISupplierInfoService supplierService;
+    ICustomerService customerService;
     @Autowired
     IUserService userService;
 
@@ -40,7 +40,7 @@ public class CustomerController {
      */
     @PostMapping("/add/{userName}")
     public Result add(@PathVariable String userName,@RequestBody User user){
-        log.info("supplier add, userName={}, user={}",userName,user);
+        log.info("customer add, userName={}, user={}",userName,user);
         Pattern pattern = Pattern.compile("[0-9a-zA-Z]+");
         Matcher matcher1 = pattern.matcher(user.getUserName());
         Matcher matcher2 = pattern.matcher(user.getKeyWord());
@@ -56,10 +56,10 @@ public class CustomerController {
         if(!(matcher1.matches()&&matcher2.matches()))
             return Result.fail("Format error");
         //判断身份是否正确
-        if(!user.getUserCharacter().equals("Supplier")||!user1.getUserCharacter().equals("Customer"))
+        if(!user.getUserCharacter().equals("Customer"))
            return Result.fail("Identity error");
         userService.save(user);
-        supplierService.save(new Supplier(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
+        customerService.save(new Customer(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
         return Result.success();
     }
 
@@ -73,13 +73,16 @@ public class CustomerController {
      */
     @DeleteMapping("/delete")
     public Result delete(String userName,String userName2){
-        log.info("supplier delete userName={},userName2={}",userName,userName2);
+        log.info("customer delete userName={},userName2={}",userName,userName2);
         User user = userService.getById(userName);
+        User user2 = userService.getById(userName2);
         //判断权限是否是true
         if(null==user.getAddPermission()||user.getAddPermission().equals("false"))
             return Result.fail("Missing permissions");
+        if(null==user2.getUserCharacter()||!user2.getUserCharacter().equals("Customer"))
+            return Result.fail("Identity error");
         boolean flag = userService.removeById(userName2);
-        supplierService.removeById(userName2);
+        customerService.removeById(userName2);
         if(flag)
             return Result.success();
         return Result.fail("Removal failed");
