@@ -1,8 +1,8 @@
-package com.example.hitsoftware.controllers;
+package com.example.hitsoftware.controllers.special;
 
-import com.example.hitsoftware.entity.Courier;
+import com.example.hitsoftware.entity.Manager;
 import com.example.hitsoftware.entity.User;
-import com.example.hitsoftware.service.ICourierService;
+import com.example.hitsoftware.service.IManagerService;
 import com.example.hitsoftware.service.IUserService;
 import com.example.hitsoftware.vo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -13,20 +13,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 这个类是属于Courier的独有类，只有用户是Courier时，
+ * 这个类是属于Manager的独有类，只有用户是Manager时，
  * 前端才应调用其中的方法，里面存在两个方法，一个是add方法
  * 另一个是delete方法。其中的add方法和delete方法只能添加
- * 或者删除Courier的人。
+ * 或者删除Manager的人。
  */
 @RestController
 @Slf4j
-@RequestMapping("/courier")
-public class CourierController {
+@RequestMapping("/manager")
+public class ManagerController {
 
     @Autowired
-    ICourierService courierService;
+    IManagerService managerService;
     @Autowired
     IUserService userService;
+
 
     /**
      * 添加用户的接口，这里采用了json数据格式进行传送
@@ -40,8 +41,8 @@ public class CourierController {
      * @return json结果
      */
     @PostMapping("/add/{userName}")
-    public Result add(@PathVariable String userName, @RequestBody User user){
-        log.info("courier add, userName={}, user={}",userName,user);
+    public Result add(@PathVariable String userName,@RequestBody User user){
+        log.info("manager add, userName={}, user={}",userName,user);
         Pattern pattern = Pattern.compile("[0-9a-zA-Z]+");
         Matcher matcher1 = pattern.matcher(user.getUserName());
         Matcher matcher2 = pattern.matcher(user.getKeyWord());
@@ -57,10 +58,10 @@ public class CourierController {
         if(!(matcher1.matches()&&matcher2.matches()))
             return Result.fail("Format error");
         //判断身份是否正确
-        if(!user.getUserCharacter().equals("Courier"))
+        if(!user.getUserCharacter().equals("Manager"))
             return Result.fail("Identity error");
         userService.save(user);
-        courierService.save(new Courier(user.getUserName(), user.getKeyWord(), user.getUserContact(), "true"));
+        managerService.save(new Manager(user.getUserName(), user.getKeyWord(), user.getUserContact(), user.getUserAddress()));
         return Result.success();
     }
 
@@ -73,18 +74,18 @@ public class CourierController {
      * @return json接口
      */
     @DeleteMapping("/delete")
-    public Result delete(String userName,String userName2){
-        log.info("courier delete userName={},userName2={}",userName,userName2);
+    public Result delete(String userName,String userName2) {
+        log.info("manager delete userName={},userName2={}", userName, userName2);
         User user = userService.getById(userName);
         User user2 = userService.getById(userName2);
         //判断权限是否是true
-        if(null==user.getAddPermission()||user.getAddPermission().equals("false"))
+        if (null == user.getAddPermission() || user.getAddPermission().equals("false"))
             return Result.fail("Missing permissions");
-        if(null==user2.getUserCharacter()||!user2.getUserCharacter().equals("Courier"))
+        if (null == user2.getUserCharacter() || user2.getUserCharacter().equals("Manager"))
             return Result.fail("Identity error");
         boolean flag = userService.removeById(userName2);
-        courierService.removeById(userName2);
-        if(flag)
+        managerService.removeById(userName2);
+        if (flag)
             return Result.success();
         return Result.fail("Removal failed");
     }

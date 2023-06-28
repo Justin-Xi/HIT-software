@@ -211,9 +211,6 @@ public class CommonController {
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("user_name", userName).set(field, value);
         Integer rows = userMapper.update(null, updateWrapper);
-        User user1 = userService.getById(userName);
-        this.delete(userName);
-        this.add(user1);
         return Result.success();
     }
 }

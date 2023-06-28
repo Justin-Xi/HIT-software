@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 @RestController
 @Slf4j
-@RequestMapping("log")
+@RequestMapping("/log")
 public class LogInController {
 
     @Autowired
