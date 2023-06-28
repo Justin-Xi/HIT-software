@@ -2,9 +2,7 @@ package com.example.hitsoftware.controllers;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.hitsoftware.entity.Product;
 import com.example.hitsoftware.entity.WareHouse;
-import com.example.hitsoftware.service.IProductService;
 import com.example.hitsoftware.service.IWareHouseService;
 import com.example.hitsoftware.vo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +55,7 @@ public class WareHouseController {
     }
 
     /**
-     * 某一仓库具体信息
+     * 某一个仓库具体信息
      * @param id 仓库id
      * @return 结果
      */
@@ -86,7 +84,7 @@ public class WareHouseController {
 
     /**
      * 修改某一仓库信息
-     * @param warehouse 修改后的仓库
+     * @param wareHouse 修改后的仓库
      * @return 结果
      */
     @PutMapping("/edit")

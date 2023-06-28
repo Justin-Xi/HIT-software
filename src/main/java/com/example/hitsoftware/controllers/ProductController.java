@@ -2,7 +2,6 @@ package com.example.hitsoftware.controllers;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.hitsoftware.entity.;
 import com.example.hitsoftware.entity.Product;
 import com.example.hitsoftware.service.IProductService;
 import com.example.hitsoftware.vo.Result;
